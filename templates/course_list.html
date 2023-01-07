@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+   <center>
+        <p style="font-size: 75px;">Courses</p><br>
+
+
+        <a href="{% url 'search' %}" class="btn btn-outline-success btn-lg" role="button">Search Bar</a>
+
+    </center>
+<br>
+            {% for parents in category %}
+                {% if parents.parents == None %}
+
+                    <h6>{{ parents.name }}</h6>
+                    <ul>
+                {% else %}
+                {% endif %}
+                {% for category in parents.children.all %}
+                    <li>
+                        <a class="btn btn-dark"  href="{% url 'category' category.id %}">{{ category.name }}</a>
+                    </li>                            <br>
+
+                {% endfor %}      
+                    </ul>
+                 
+            {% endfor %}
+        <br>
+        <h1><a class="btn btn-primary btn-lg" href="{% url 'course_list_byV' %}">course list order by view</a></h1>
+        <h1><a class="btn btn-primary btn-lg" href="{% url 'course_list_byC' %}">course list order by concession</a></h1>
+
+        <br><br>
+        {% for course in courses %}
+
+            <div class="card">
+                <div class="card-header">
+                <a href="{% url 'course' course.id %}" class="btn btn-dark btn-lg" role="button">{{ course|upper }}</a>
+                </div>
+                <div class="card-body">
+                <h4 class="card-title">Course name :  {{ course.name }}</h4>
+                <p class="card-text">
+                    <ul>
+                        <li><h6>Views  :  {{ course.views }}</h6></li>
+                        <li><h6>Concession  :  {{ course.concession }}</h6></li>
+                        <li>Date :  {{ course.upload_date }}</li>
+                        <li>Teacher :  {{ course.teacher }}</li>
+                        <li>Category : {{ course.category.parents }}</li>
+                    </ul>
+                </div>
+
+            </div>
+            <br>
+            {% endfor %}
+
+
+
+            <div class="pagination">
+                <span class="step-links">
+                    {% if courses.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ courses.previous_page_number }}">previous</a>
+                    {% endif %}
+            
+                    <span class="current">
+                        Page {{ courses.number }} of {{ courses.paginator.num_pages }}.
+                    </span>
+            
+                    {% if courses.has_next %}
+                        <a href="?page={{ courses.next_page_number }}">next</a>
+                        <a href="?page={{ courses.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+            <br><br>
+{% endblock %}

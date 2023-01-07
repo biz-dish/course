@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<html>
+<head>
+</head>
+<body>
+    <!--<h1>Messages</h1>
+    {% for i in response %}
+    <strong>{{i}}</strong><br><br>
+    {% endfor %}-->
+        <div id="toAppend">        
+        </div>
+    <script>
+        //------------------------------------------- for each
+        
+      
+        fetch('http://127.0.0.1:8000/api_message/')
+            .then(response => response.json())
+            //.then(json => console.log(json))
+            .then(json => json.forEach(message => {
+                if (message.room == '{{ id }}'){
+                    toAppend.innerHTML += `
+                        <div class="card" style="margin-left: 20px; margin-right: 500px;">
+                        <div class="card-header">
+                        <p class="card-title">${message.user}</p>
+                        </div>
+                        <div class="card-body">
+                                <h6>${message.message}</h6>
+                                <p style="margin-left: 450px;">${message.date}</p>
+                        </div></div> <br>`;
+                        }}
+                    ));
+                
+        
+        //--------------------------------------------- for
+
+        //let messages = [];
+        
+        //fetchData();
+        
+        //function fetchData() {
+        //    fetch('http://127.0.0.1:8000/api_message/')
+        //    .then(response => response.json())
+        //    .then(json => messages = json)
+        //    .then(() => {
+        //        for (let message of messages) {
+        //        toAppend.innerHTML += `
+        //        <div class="card" style="margin-left: 20px; margin-right: 500px;">
+        //        <div class="card-header">
+        //        <p class="card-title">${message.user}</p>
+        //        </div>
+        //        <div class="card-body">
+        //               <h6>${message.message}</h6>
+        //                <p style="margin-left: 450px;">${message.date}</p>
+        //          </div></div> <br>`;
+        //        }
+        //    });
+        //}
+        </script>
+
+
+</body>
+</html>
+{% endblock %}

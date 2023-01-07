@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+{% load cache %}
+
+<center>
+    <p style="font-size: 75px;">{{ course }}</p>
+      
+        <div class="card">
+          <div class="card-body">
+            <h6>Views  :  {{ course.views }}</h6>
+            <p class="card-text">
+                <ul class="list-group">
+                  <li class="list-group-item list-group-item-dark">Price  :  {{ course.price }}</li>
+                  <li class="list-group-item list-group-item-primary">Teacher  :  {{ course.teacher }}</li>
+                    <li class="list-group-item list-group-item-info">File  :  <a href="{{ course.file.url }}">{{ course.file }}</a></li>
+                    <li class="list-group-item list-group-item-success">Description  :  {{ course.description }}</li>
+                    <li class="list-group-item list-group-item-warning">Date  :  {{ course.upload_date }}</li>
+                    <li class="list-group-item list-group-item-danger">Category  :  {{ course.category }}</li>
+                </ul>
+          </div>
+        </center>
+        <br>
+        <a class="btn btn-success" href="{% url 'upcourse' course.id %}">Update</a>
+
+        {% if request.user.is_authenticated %}
+        <form style="margin-top: 10px;" action="{% url 'basket' course.id  %}" method="post">
+          {% csrf_token %}
+          <button type='submit' name='buy' value="{{ course.id }}" class="btn btn-outline-warning">Add To Your Basket</button>
+       </form>
+       {% else %} <br>
+       <a class="btn btn-success" href="{% url 'set' course.id %}">Add To Your Session Basket</a>
+       {% endif %}
+          <br>
+        <form action="{% url 'buy' course.id  %}" method="post">
+          {% csrf_token %}
+          <button type='submit' name='buy' value="{{ course.id }}" class="btn btn-danger">Buy Course {{ course.price }}</button>
+       </form>
+       {% if course.tbuy == True %}
+       .
+       <form action="{% url 'tbuy' course.id  %}" method="post">
+        {% csrf_token %}
+        <button type='submit' name='tbuy' value="{{ course.id }}" class="btn btn-warning">Token Buy Course</button>
+       </form>
+       {% endif %}
+       <br>
+       <br>
+      <h1><a class="btn btn-outline-success btn-lg" href="{% url 'course_chat' course.id %}">Course Chat</a></h1>
+
+        </div>
+            <br><br>
+            <center>
+            <h1><a class="btn btn-outline-dark" href="{% url 'add_headline' course.id %}">add headline</a></h1>
+          </center>
+          {% for headlines in headline %}
+          <div style="margin-left: 20px; margin-right: 20px;" class="card">
+                <div class="card-header">
+              <h4 class="card-title">Headline name :  {{ headlines.name }}</h4>
+            </div>
+            <div class="card-body">
+
+              <p class="card-text">
+                  <ul>
+                      <h5>Description : </h5>  <h6>{{ headlines.description }}</h6>
+                      
+                      <h1><a class="btn btn-outline-dark" href="{% url 'videos' headlines.id %}">videos</a></h1>
+
+    
+
+                      <h1><a class="btn btn-outline-dark" href="{% url 'add_video' headlines.id %}">add video</a></h1>
+                      <h1><a class="btn btn-outline-dark" href="{% url 'video_formset' headlines.id %}">add video formset</a></h1>
+                  </ul>
+              </div>
+
+          </div>
+          <br>
+          {% endfor %}
+          {% if request.user.is_authenticated %}
+          <br>
+          <div class="card" style="margin-left: 20px; margin-right: 500px;">
+             <div style="margin-left: 30px; margin-right: 30px; margin-top: 20px;">
+                <h3>Add Comment</h3>        
+                <form action="" method=POST>
+    
+                {% csrf_token %}
+    
+                {{ form.as_p }}
+        
+                    <input style="margin-bottom: 20px;" type="submit" value="Submit" class="btn btn-dark">
+                    
+                </form>
+              </div>
+            </div>
+              <br><br>
+              {% endif %}    
+            {% for comment in comment %}
+             {% if comment.parent == None %}
+
+              <div class="card" style="margin-left: 20px; margin-right: 500px;">
+                  <div class="card-header">
+                    <h5 class="card-title">From {{ comment.name }}</h5>
+                  </div>
+                  <div class="card-body">
+                    <h6>Comment For :  {{ comment.course }}</h6>
+                  <p class="card-text">
+                      <ul>
+                          <li>Username :  {{ comment.sender }}</li>
+                          <li>POV :  {{ comment.pov }}</li>
+
+                      </ul>
+                      {% if request.user in comment.likers.all %}
+
+                          <form action="{% url 'dislike' comment.id  %}" method="post">
+                              {% csrf_token %}
+                              <button type='submit' name='dislike' value="{{ comment.id }}" class="btn btn-danger">Dislike {{ comment.like }}</button>
+                          </form>
+
+                      {% else %}    
+
+                          <form action="{% url 'like' comment.id  %}" method="post" >
+                              {% csrf_token %}
+                              <button type='submit' name='like' value="{{ comment.id }}" class="btn btn-success">Like  {{ comment.like }}</button>
+                          </form>
+
+                      {% endif %}
+
+                    
+                  </div>
+                  
+                  {% for replay in comment.replies.all %}
+                  <div class="card" style="margin-left: 20px; margin-right: 10px;">
+
+                    <div class="card-header">
+                      
+
+                      <h5 class="card-title">From {{ replay.name }}</h5>
+                    </div>
+                      
+                      <div class="card-body">
+                        <p class="card-text">
+                          <ul>
+                              <li>Username :  {{ replay.sender }}</li>
+                              <li>POV :  {{ replay.pov }}</li>
+    
+                          </ul>
+
+                      </div>
+                    </div>
+                  {% endfor %}
+                  <div>
+                    <br>
+                      <div style="margin-left: 20px; margin-right: 10px; margin-bottom: 10px;">
+                      <h5>Replay</h5>
+                      <form method="post">
+                          {{ form.as_p }}
+                          {% csrf_token %}
+                          <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                          <input class="btn btn-dark" type="submit" value="Replay">
+                      </form>
+                    </div>
+                  </div>
+              </div>
+              <br>
+              {% endif %}
+
+            {% endfor %}
+            <br><hr><br><h1>courses in {{ course.category }} category</h1>
+            
+            {% cache 500 s_course course.id %}
+
+            {% for course in s_course %}
+            <div class="card">
+                <div class="card-header">
+                <a href="{% url 'course' course.id %}" class="btn btn-dark btn-lg" role="button">{{ course|upper }}</a>
+                </div>
+                <div class="card-body">
+                <h4 class="card-title">Course name :  {{ course.name }}</h4>
+                <p class="card-text">
+                    <ul>
+                        <li><h6>Views  :  {{ course.views }}</h6></li>
+                        <li><h6>Concession  :  {{ course.concession }}</h6></li>
+                        <li>Date :  {{ course.upload_date }}</li>
+                        <li>Teacher :  {{ course.teacher }}</li>
+                        <li>Category : {{ course.category.parents }}</li>
+                    </ul>
+                </div>
+
+            </div>
+            <br>
+            {% endfor %}
+            {% endcache %}
+{% endblock %}

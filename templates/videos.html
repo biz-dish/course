@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<center>
+        <div style="margin-left: 20px; margin-right: 20px;" class="card">
+            <div class="card-header">
+            <h4 class="card-title">Headline name :  {{ headline.name }}</h4>
+        </div>
+        <div class="card-body">
+
+            <p class="card-text">
+                <ul>
+                    <h5>Description : </h5>  <h6>{{ headline.description }}</h6>
+                    {% for video in video %}
+                    {% if video.demo %}
+                    <li>Demo Video :  <a href="{{ video.file.url }}">{{ video.file }}</a></li><hr>
+                    {% endif %}
+                    {% if request.user in course.buyer.all %}
+                    {% if video.demo %}
+                    {% else %}
+                    <li>Video :  <a href="{{ video.file.url }}">{{ video.file }}</a></li>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+    <br>
+                    <hr>
+<br>
+                    {% if request.user not in course.buyer.all %}
+                    <br>
+                    <p>buy course to see all video</p>
+                    {% endif %}
+
+                </ul>
+            </div>
+
+        </div>
+        <br>
+</center>
+
+
+{% endblock %}

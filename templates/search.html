@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <center>
+        <form method="POST" action="{% url 'search' %}" class="d-flex" role="search">
+            {% csrf_token %}
+            <input name="searched" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form><br>
+        {% if course %}
+
+            {% if searched %}
+                <h1>
+                    Result For "{{ searched|upper }}" :
+                </h1>
+                     <br>    </center>
+
+                    {% for course in course %}
+
+                    <div class="card">
+                        <div class="card-header">
+                        <a href="{% url 'course' course.id %}" class="btn btn-dark btn-lg" role="button">{{ course|upper }}</a>
+                        </div>
+                        <div class="card-body">
+                        <h4 class="card-title">Course name :  {{ course.name }}</h4>
+                        <p class="card-text">
+                            <ul>
+                                <li><h6>Views  :  {{ course.views }}</h6></li>
+                                <li>Date :  {{ course.upload_date }}</li>
+                                <li>Teacher :  {{ course.teacher }}</li>
+                                <li>Category : {{ course.category.parents }}</li> 
+                            </ul>
+                        </div>
+
+                    </div>
+                    <br>
+                    {% endfor %}
+                <center>
+
+
+
+            {% else %}
+                <h1>
+                    You Forgot To Search !
+                </h1>
+            {% endif %}
+        {% else %}
+
+            {% if searched %}
+
+            <h1>No Result For "{{ searched }}" </h1>
+            {% endif %}
+
+        {% endif %}
+
+    </center>
+
+{% endblock %}

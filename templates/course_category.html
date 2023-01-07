@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+   <center>
+        <p style="font-size: 75px;">Courses</p></center>
+
+
+        {% for course in courses %}
+
+            <div class="card">
+                <div class="card-header">
+                <a href="{% url 'course' course.id %}" class="btn btn-dark btn-lg" role="button">{{ course|upper }}</a>
+                </div>
+                <div class="card-body">
+                <h4 class="card-title">Course name :  {{ course.name }}</h4>
+                <p class="card-text">
+                    <ul>
+                        <li>Date :  {{ course.upload_date }}</li>
+                        <li>Teacher :  {{ course.teacher }}</li>
+                        <li>Category :  {{ course.category.parents }}</li>
+                        
+
+
+                       
+                       
+                    </ul>
+                </div>
+
+            </div>
+            <br>
+            {% endfor %}
+
+
+
+            <div class="pagination">
+                <span class="step-links">
+                    {% if courses.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ courses.previous_page_number }}">previous</a>
+                    {% endif %}
+            
+                    <span class="current">
+                        Page {{ courses.number }} of {{ courses.paginator.num_pages }}.
+                    </span>
+            
+                    {% if courses.has_next %}
+                        <a href="?page={{ courses.next_page_number }}">next</a>
+                        <a href="?page={{ courses.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+            <br><br>
+{% endblock %}

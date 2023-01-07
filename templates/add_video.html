@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+    <center>
+   
+        <h1>Add Video</h1>
+        <br><br>
+
+            <form action="" method=POST enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+            <br>
+            <br>
+            <div class="d-grid gap-2">
+                <input type="submit" value="Submit" class="btn btn-dark">
+            </div>
+                <br><br>
+            </form>
+ 
+        
+    </center>
+
+
+{% endblock %}

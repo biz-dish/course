@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+
+        {% for chat in chat %}
+
+        <div class="card" style="margin-left: 20px; margin-right: 500px;">
+            <div class="card-header">
+            {% if chat.user == course.teacher %}
+            <h5 class="card-title">{{ chat.user }}</h5>
+            {% else %}
+            <p class="card-title">{{ chat.user }}</p>
+            {% endif %}
+            </div>
+            <div class="card-body">
+                    <h6>{{ chat.message }}</h6>
+                    <p style="margin-left: 450px;">{{ chat.date }}</p>
+            
+            </div>
+            
+            
+        </div>
+        <br>
+        {% endfor %}
+        <br><br><br><br> <br>
+        <div id="div">
+
+            <form id="form" style="margin-top: 40%; margin-left: -89px; margin-bottom: 50px; background-color: rgba(33, 64, 70, 0.322);" action="" method=POST >
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+            <input type="hidden" name="parent_id" value="{{ chat.id }}">
+
+                <input type="submit" value="Submit" class="btn btn-dark">
+                <br><br><br><br>
+            </form>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $(this).scrollTop(100000)
+    });
+
+    window.onscroll = function() {myFunction()};
+    
+    var div = document.getElementById("div");
+    var sticky = div.offsetTop;
+    
+    function myFunction() {
+      if (window.pageYOffset <= sticky) {
+        div.classList.add("sticky")
+      } else {
+        div.classList.remove("sticky");
+      }
+    }
+
+    const form = document.getElementById("form");
+    form.addEventListener('submit', SubmitHandel);
+    function SubmitHandel(e){
+      e.preventDefault();
+  $.ajax(
+    {
+      type:'POST',
+      url:"{% url 'course_chat' course.id %}",
+      data:$('#form').serialize(),
+    
+      success: function(data){
+        if (data){
+          document.getElementById("form").reset(); 
+          window.location.reload();
+        }
+
+      },
+    }
+     
+  )
+    }
+    </script>
+        <style>
+       .sticky {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            }
+
+
+        </style>
+ 
+        
+
+
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<html>
+
+    <head>
+
+    </head> 
+
+    <body>
+        <center>
+            
+
+                <h1><a class="btn btn-primary btn-lg" href="{% url 'add_course' %}">add cource</a></h1>
+                <h1><a class="btn btn-primary btn-lg" href="{% url 'cache' %}">cache clear</a></h1>
+                <h1><a class="btn btn-primary btn-lg" href="{% url 'add_room' %}">add room</a></h1>
+                <h1><a class="btn btn-primary btn-lg" href="{% url 'course_list' %}">course list</a></h1>
+                <h1><a class="btn btn-primary btn-lg" href="{% url 'rooms_list' %}">room list</a></h1>
+                <h1><a class="btn btn-primary btn-lg" href="{% url 'basket-list' %}">basket list</a></h1>
+                <h1><a class="btn btn-primary btn-lg" href="{% url 'all_sessions' %}">sessions basket list</a></h1>
+                
+            {% if user.is_authenticated %}
+                <h1><a class="btn btn-outline-primary btn-lg" href="{% url 'logout' %}">logout </a></h1>
+                <h1><a class="btn btn-primary btn-lg" href="{% url 'chang_password' %}">chang password </a></h1>
+            {% else %}
+                <h1><a class="btn btn-outline-primary btn-lg" href="{% url 'login' %}">login</a></h1>
+                <h1><a class="btn btn-outline-primary btn-lg" href="{% url 'register' %}">register </a></h1>
+            {% endif %}<br><br><hr><br>
+
+
+        </center>
+        <h2>Some Random Course</h2>
+        <div class="card">
+            <div class="card-header">
+            <a href="{% url 'course' random_course.id %}" class="btn btn-dark btn-lg" role="button">{{ random_course|upper }}</a>
+            </div>
+            <div class="card-body">
+            <h4 class="card-title">Course name :  {{ random_course.name }}</h4>
+            <p class="card-text">
+                <ul>
+                    <li><h6>Views  :  {{ random_course.views }}</h6></li>
+                    <li><h6>Concession  :  {{ random_course.concession }}</h6></li>
+                    <li>Date :  {{ random_course.upload_date }}</li>
+                    <li>Teacher :  {{ random_course.teacher }}</li>
+                    <li>Category : {{ random_course.category.parents }}</li>
+                </ul>
+            </div>
+
+        </div>
+        <br>
+        <hr>
+        <h2>Top Course By Concession</h2>
+        <div class="card">
+            <div class="card-header">
+            <a href="{% url 'course' top_course.id %}" class="btn btn-dark btn-lg" role="button">{{ top_course|upper }}</a>
+            </div>
+            <div class="card-body">
+            <h4 class="card-title">Course name :  {{ top_course.name }}</h4>
+            <p class="card-text">
+                <ul>
+                    <li><h6>Views  :  {{ top_course.views }}</h6></li>
+                    <li><h6>Concession  :  {{ top_course.concession }}</h6></li>
+                    <li>Date :  {{ top_course.upload_date }}</li>
+                    <li>Teacher :  {{ top_course.teacher }}</li>
+                    <li>Category : {{ top_course.category.parents }}</li>
+                </ul>
+            </div>
+
+        </div>
+        <br>
+        
+    {% if user.is_authenticated %}
+    <hr>
+        <h2>Courses You Buy</h2>
+        {% for course in bcourse %}
+            <div class="card">
+                <div class="card-header">
+                <a href="{% url 'course' course.id %}" class="btn btn-dark btn-lg" role="button">{{ course|upper }}</a>
+                </div>
+                <div class="card-body">
+                <h4 class="card-title">Course name :  {{ course.name }}</h4>
+                <p class="card-text">
+                    <ul>
+                        <li><h6>Views  :  {{ course.views }}</h6></li>
+                        <li><h6>Concession  :  {{ course.concession }}</h6></li>
+                        <li>Date :  {{ course.upload_date }}</li>
+                        <li>Teacher :  {{ course.teacher }}</li>
+                        <li>Category : {{ course.category.parents }}</li>
+                    </ul>
+                </div>
+
+            </div>
+            <br>
+            {% endfor %}
+        {% endif %}    
+            
+zz
+            {% if user.is_authenticated %}
+
+            <hr>
+                <h2>Courses You May Like</h2>
+                {% for course in s_course %}
+                    {% if request.user not in course.buyer.all %}
+
+                    <div class="card">
+                        <div class="card-header">
+                        <a href="{% url 'course' course.id %}" class="btn btn-dark btn-lg" role="button">{{ course|upper }}</a>
+                        </div>
+                        <div class="card-body">
+                        <h4 class="card-title">Course name :  {{ course.name }}</h4>
+                        <p class="card-text">
+                            <ul>
+                                <li><h6>Views  :  {{ course.views }}</h6></li>
+                                <li><h6>Concession  :  {{ course.concession }}</h6></li>
+                                <li>Date :  {{ course.upload_date }}</li>
+                                <li>Teacher :  {{ course.teacher }}</li>
+                                <li>Category : {{ course.category.parents }}</li>
+                            </ul>
+                        </div>
+        
+                    </div>
+                    <br>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                    <hr>
+
+        
+
+    </body>    
+
+</html>
+
+{% endblock %}

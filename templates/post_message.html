@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<html>
+    <head>
+
+    </head>
+
+    <body>
+
+
+
+        <script>
+
+            fetch("http://127.0.0.1:8000/add_message/", {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type':'application/json',
+                    'X-Requested-With':'XMLHttpRequest',
+                    'X-CSRFToken': "{{ csrf_token }}",
+                                    },
+                body: JSON.stringify(    {
+                        "user": "{{ request.user.username }}",
+                        "date": "2022-12-19",
+                        "message": "pppppppp",
+                        "room": '{{ id }}'
+                    }),
+                }
+            )
+
+            .then(response => response.json())
+            .then(json => console.log(json));
+        </script>
+
+    </body>
+</html>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if form.errors %}
+
+    <div class="alert alert-danger" role="alert">
+        There Is A Problem, Pleas Try Again!
+    </div>
+
+{% endif %}
+    <center>
+        <h1>Register</h1>
+        <br><br>
+
+
+        <div class="mb-3">
+            <form action="{% url 'register' %}" method=POST>
+
+                {% csrf_token %}
+                {{ form.as_p }}
+                    <br><br>
+                  <div style="margin-right:20px" class="d-grid gap-2">
+                     <input type="submit" value="Submit" class="btn btn-dark">
+                  </div>
+            </form>
+        </div>
+                        <br><br>
+
+    </center>
+
+
+{% endblock %}

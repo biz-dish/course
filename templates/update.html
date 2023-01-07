@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div style="margin-left: 30px;">
+    {% if request.user == course.teacher %}
+    
+    
+        <h1>Update...</h1>
+        <br>
+        <form action="" method=POST>
+            {% csrf_token %}
+            {{ form.as_p }}<br>
+            <br>
+            <div class="d-grid gap-2">
+                <input type="submit" value="Submit" class="btn btn-outline-success">
+            </div>
+      </form>
+    <br>
+    {% else %}
+        <br>
+        <h1>Only Teacher Can  Update Course</h1>
+        <br>
+    {% endif %}
+    </div>
+
+{% endblock %}

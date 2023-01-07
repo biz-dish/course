@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+   <center>
+        <p style="font-size: 75px;">Rooms</p><br>
+
+
+
+    </center>
+<br>
+        {% for room in room %}
+
+            <div class="card">
+                <div class="card-header">
+                    <a href="{% url 'chat' room.id %}" class="btn btn-dark btn-lg" role="button">{{ room_name|upper }}</a>
+                </div>
+                <div class="card-body">
+                <h4 class="card-title">Room name :  {{ room.room_name }}</h4>
+                <p class="card-text">
+                    <ul>
+                        <li>Admin :  {{ room.admin }}</li>
+                    </ul>
+                </div>
+
+            </div>
+            <br>
+            {% endfor %}
+
+
+{% endblock %}

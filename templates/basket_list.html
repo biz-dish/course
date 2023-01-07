@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+    <CEnter>
+        <H1>Your Basket</H1>
+    </CEnter>
+
+        {% for basket in basket %}
+
+                    <div class="card">
+                        <div class="card-header">
+                        <a href="{% url 'course' basket.course.id %}" class="btn btn-dark btn-lg" role="button">{{ basket.course }}</a>
+                        
+                        <form action="{% url 'delete' basket.id %}" method="POST"><br>
+                            {% csrf_token %}
+                            <button class="btn btn-outline-danger btn-lg">Delete</button>
+                        </form>
+                    </div>
+                    </div>
+                        <br><hr><br>
+        {% endfor %}
+
+{% endblock %}
